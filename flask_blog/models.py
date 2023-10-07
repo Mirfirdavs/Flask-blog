@@ -6,8 +6,6 @@ from flask_login import UserMixin
 
 @login_manager.user_loader
 def load_user(user_id):
-    # Контекстный менеджер нужен?
-    #with app.app_context():
     user = User.query.get(int(user_id))
     return user
 

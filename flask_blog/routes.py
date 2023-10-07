@@ -12,8 +12,6 @@ from flask_mail import Message
 @app.route("/")
 @app.route("/home")
 def home():
-    # Котексный менеджер нужен?
-    #with app.app_context():
     page = request.args.get('page', 1, type=int)
     posts = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
     
@@ -34,7 +32,6 @@ def register():
         # Действия, когда данные формы прошли валидацию
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(username=form.username.data, email=form.email.data, password=hashed_password)
-        #with app.app_context():
         db.session.add(user)
         db.session.commit()
         
@@ -50,8 +47,6 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         # Действия, когда данные формы прошли валидацию
-        # Контекстный менеджер нужен?
-        #with app.app_context():
         user = User.query.filter_by(email=form.email.data).first()
         
         if user and bcrypt.check_password_hash(user.password, form.password.data):
@@ -86,8 +81,6 @@ def save_picture(form_picture):
 def account():
     form = UpdateAccountForm()
     if form.validate_on_submit():
-        # Контекстный менеджер нужен?
-        #with app.app_context():
         if form.picture.data:
             picture_file = save_picture(form.picture.data)
             current_user.image_file = picture_file
@@ -113,8 +106,6 @@ def account():
 def new_post():
     form = PostFrom()
     if form.validate_on_submit():
-        # Контекстный менеджер нужен?
-        #with app.app_context():
         post = Post(title = form.title.data, content = form.content.data, author = current_user)
         db.session.add(post)
         db.session.commit()
@@ -178,7 +169,7 @@ def user_posts(username):
 def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Password Reset Request', 
-                    sender='noreply@demo.com', 
+                    sender='kalonovmir@yandex.ru', #noreply@demo.com
                     recipients=[user.email])
     msg.body = f'''To reset your password, visit the following link:
 {url_for('reset_token', token=token, _external=True)}
