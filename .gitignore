@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+# .env file
+.env
+How to create db file and add data.txt
+explanations.txt
+
 # Distribution / packaging
 .Python
 build/
